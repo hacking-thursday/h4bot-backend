@@ -1,0 +1,10 @@
+version: '2'
+services:
+  web:
+    build: .
+    image: h4/bot
+    container_name: messenger_app
+    ports:
+     - "10000:10000"
+    volumes:
+     - .:/app
