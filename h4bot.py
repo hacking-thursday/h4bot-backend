@@ -54,10 +54,14 @@ def checkin():
 def attendee():
     attendee = []
 
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
+    if request.args.get('date'):
+        d = request.args.get('date')
+        print 111
+    else:
+        d = datetime.datetime.now().strftime("%Y-%m-%d")
 
     cur = g.db.cursor()
-    cur.execute("SELECT DISTINCT checkin.user_id, users.*, n.* FROM checkin LEFT OUTER JOIN users ON users.user_id=checkin.user_id LEFT OUTER JOIN (SELECT MAX(nick.id), nick.* FROM nick GROUP BY nick.user_id) n ON checkin.user_id=n.user_id WHERE checkin.datetime LIKE '%s%%'" % today)
+    cur.execute("SELECT DISTINCT checkin.user_id, users.*, n.* FROM checkin LEFT OUTER JOIN users ON users.user_id=checkin.user_id LEFT OUTER JOIN (SELECT MAX(nick.id), nick.* FROM nick GROUP BY nick.user_id) n ON checkin.user_id=n.user_id WHERE checkin.datetime LIKE '%s%%'" % d)
     #cur.execute("SELECT DISTINCT checkin.user_id, users.*, n.* FROM checkin LEFT OUTER JOIN users ON users.user_id=checkin.user_id LEFT OUTER JOIN (SELECT MAX(nick.id), nick.* FROM nick GROUP BY nick.user_id) n ON checkin.user_id=n.user_id WHERE checkin.datetime LIKE '2017-06-01%%'")
     _ = cur.fetchall()
 
